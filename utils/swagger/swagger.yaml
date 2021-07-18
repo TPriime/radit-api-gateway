@@ -1,0 +1,363 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Radit API Explorer
+  description: A proposed openAPI explorer for Radit Api
+schemes:
+  - http
+servers:
+  - url: http://localhost:5000/api/
+    description: Development server
+tags:
+  - name: Auth
+    description: Authentication and authorization operations
+  - name: Customer
+    description: Routes related to End User (Customer)
+  - name: Product
+    description: Routes related to Radit Products
+  - name: Order
+    description: Routes related to Radit Orders
+  - name: Payment
+    description: Routes related to Radit Payment
+paths:
+  /auth/register:
+    post:
+      tags:
+        - Auth
+      summary: Creates a new User/Customer
+      description: Creates a new user/customer
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  required: true
+                  example: user2021
+                password:
+                  type: string
+                  example: Password@123
+      responses:
+        "201":
+          description: User Created successfully.
+        "400":
+          description: Unable to create user.
+        "500":
+          description: Internal Server Error
+  /auth/login:
+    post:
+      tags:
+        - Auth
+      summary: Login a user/customer
+      description: Login a user/customer using email and password.
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  required: true
+                  example: user2021
+                password:
+                  type: string
+                  example: Password@123
+      responses:
+        "200":
+          description: Logged In Successfully.
+        "400":
+          description: Unable to Login.
+        "500":
+          description: Internal Server Error
+ 
+  /customer/{username}:
+    get:
+      tags:
+        - Customer
+      summary: Get all the details of a customer
+      description: Get a list of all the details of a customer by providing username.
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Customer Data Fetched successfully.
+        "403":
+          description: Failed, Forbidden to fetch customer data.
+        "500":
+          description: Internal Server Error
+      security:
+        - bearerAuth: []
+
+  /product/:
+    put:
+      tags:
+        - Product
+      summary: Create a product
+      description: Create a product.
+      produces:
+        - application/json
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                productName:
+                  type: string
+                  required: true
+                  example: Radit Jotter
+                productPrice:
+                  type: integer 
+                  required: true
+                  example: 500
+                productCount:
+                  type: integer
+                  required: true
+                  example: 10
+      responses:
+        "200":
+          description: Product created successfully.
+        "403":
+          description: Failed to create product.
+        "500":
+          description: Internal Server Error
+      security:
+        - bearerAuth: []
+  /product/{productName}:
+    get:
+      tags:
+        - Product
+      summary: Get all the details of a product
+      description: Get a list of all the details of a products by providing productName.
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Product Data Fetched successfully.
+        "403":
+          description: Failed, Forbidden to fetch product data.
+        "500":
+          description: Internal Server Error
+      security:
+        - bearerAuth: []
+  /product/all:
+    get:
+      tags:
+        - Product
+      summary: Get list of all products
+      description: Get a list of all radit products.
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Products Fetched successfully.
+        "403":
+          description: Failed, Forbidden to fetch product data.
+        "500":
+          description: Internal Server Error
+      security:
+        - bearerAuth: []
+       
+  /order/:
+    put:
+      tags:
+        - Order
+      summary: Create an order
+      description: Create an order.
+      produces:
+        - application/json
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customerId:
+                  type: string
+                  required: true
+                  example: 60f30453e120d847211cf200
+                amount:
+                  type: integer 
+                  required: true
+                  example: 2000
+                productIds:
+                  type: array
+                  required: true
+                  items: 
+                    type: string
+                    example: 60f30453e120d253911cf215
+      responses:
+        "200":
+          description: Order created successfully.
+        "403":
+          description: Failed to create order.
+        "500":
+          description: Internal Server Error
+      security:
+        - bearerAuth: []
+  /order/{orderId}:
+    get:
+      tags:
+        - Order
+      summary: Get all the details of an order
+      description: Get all the details of an order by providing orderId.
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Order Data Fetched successfully.
+        "403":
+          description: Failed to fetch order data.
+        "500":
+          description: Internal Server Error
+      security:
+        - bearerAuth: []
+  /order/all:
+    get:
+      tags:
+        - Order
+      summary: Get list of all orders
+      description: Get a list of all radit orders.
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Orders Fetched successfully.
+        "403":
+          description: Failed to fetch orders.
+        "500":
+          description: Internal Server Error
+      security:
+        - bearerAuth: []
+  
+  /payment/:
+    put:
+      tags:
+        - Payment
+      summary: Create a payment
+      description: Create a payment.
+      produces:
+        - application/json
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customerId:
+                  type: string
+                  required: true
+                  example: 60f30453e120d847211cf200
+                orderId:
+                  type: string
+                  required: true
+                  example: 60f30453e120d847211cf555
+                amount:
+                  type: integer 
+                  required: true
+                  example: 5000
+                productIds:
+                  type: array
+                  required: true
+                  items: 
+                    type: string
+                    example: 60f30453e120d253911cf215
+      responses:
+        "200":
+          description: Payment created successfully.
+        "403":
+          description: Failed to create payment.
+        "500":
+          description: Internal Server Error
+      security:
+        - bearerAuth: []
+  /payment/{paymentId}:
+    get:
+      tags:
+        - Payment
+      summary: Get all the details of a payment
+      description: Get all the details of a payment by providing paymentId.
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Payment Data Fetched successfully.
+        "403":
+          description: Failed to fetch payment data.
+        "500":
+          description: Internal Server Error
+      security:
+        - bearerAuth: []
+  /payment/customer/{customerId}:
+    get:
+      tags:
+        - Payment
+      summary: Get all the details of a payment
+      description: Get all the details of a payment by providing customerId.
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Payment Data Fetched successfully.
+        "403":
+          description: Failed to fetch payment data.
+        "500":
+          description: Internal Server Error
+      security:
+        - bearerAuth: []
+  /payment/all:
+    get:
+      tags:
+        - Payment
+      summary: Get list of all payments
+      description: Get a list of all radit payments.
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: Payments Fetched successfully.
+        "403":
+          description: Failed to fetch payments.
+        "500":
+          description: Internal Server Error
+      security:
+        - bearerAuth: []
+  
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: string
+        productName:
+          type: string
+        productPrice:
+          type: integer
+        productCount:
+          type: integer
+      required:
+        - productName
+        - productPrice
+        - productCount
