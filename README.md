@@ -1,4 +1,4 @@
-# Radit Product Service
+# Radit Api Gateway
 
 ### Dependencies
 
