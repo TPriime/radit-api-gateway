@@ -45,6 +45,8 @@ module.exports.checkAndvalidateAccessToken = (req, res, next) => {
       return;
     }
 
+    console.log(`error: ${verificationResult.error}`)
+
     // check if expired
     if (verificationResult.error.toString().includes(Headers.EXPIRED)) {
       return res.status(401).json({
